@@ -30,3 +30,39 @@ tabParent.addEventListener('click',(event)=>{
         })
     }
 })
+
+
+//modal
+
+const modalBth = document.querySelectorAll('[data-modal]'),
+    modal = document.querySelector('.modal'),
+    modalClose= document.querySelector('[data-close]');
+modalBth.forEach(item=>{    
+    item.addEventListener('click', ()=>{
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+    })
+    })
+
+    modalClose.addEventListener('click', ()=>{
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    })
+
+modal.addEventListener('click', (event)=>{
+    if(event.target === modal){
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+})
+
+document.addEventListener('keydown', (event)=>{
+    if(event.code === 'Escape'){
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+})
