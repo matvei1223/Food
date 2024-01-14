@@ -1,4 +1,5 @@
-const tabs = document.querySelectorAll('.tabheader__item');
+window.addEventListener('DOMContentLoaded',()=>{
+    const tabs = document.querySelectorAll('.tabheader__item');
 const tabContent = document.querySelectorAll('.tabcontent');
 const tabParent = document.querySelector('.tabheader');
 
@@ -31,43 +32,37 @@ tabParent.addEventListener('click',(event)=>{
     }
 })
 
-
-//modal
-
-const modalBth = document.querySelectorAll('[data-modal]'),
+const modalBtn = document.querySelectorAll('[data-modal]'),
     modal = document.querySelector('.modal'),
-    modalClose= document.querySelector('[data-close]');
-modalBth.forEach(item=>{    
-    item.addEventListener('click', ()=>{
+    modalClose = document.querySelector('[data-close]');
+
+modalBtn.forEach(item=>{
+    item.addEventListener('click',()=>{
         modal.classList.add('show');
         modal.classList.remove('hide');
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow ='hidden';
     })
-    })
+})
 
-    modalClose.addEventListener('click', ()=>{
-        modal.classList.add('hide');
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    })
-
-modal.addEventListener('click', (event)=>{
+modalClose.addEventListener('click',()=>{
+    modal.classList.add('hide');
+    modal.classList.remove('show');
+     document.body.style.overflow ='';
+})
+modal.addEventListener('click',(event)=>{
     if(event.target === modal){
         modal.classList.add('hide');
         modal.classList.remove('show');
-        document.body.style.overflow = '';
+        document.body.style.overflow ='';
     }
 })
-
-document.addEventListener('keydown', (event)=>{
+document.addEventListener('keydown',(event)=>{
     if(event.code === 'Escape'){
         modal.classList.add('hide');
         modal.classList.remove('show');
-        document.body.style.overflow = '';
+        document.body.style.overflow ='';
     }
 })
-
-
 //slider
 const slides = document.querySelectorAll('.offer__slide'),
 prev = document.querySelector('.offer__slider-prev'),
@@ -152,3 +147,64 @@ function setClock(selector,endtime){
     }
 }
 setClock('.timer',timeEnd);
+
+//calc
+const result = document.querySelector('.calculating__result span');
+let sex,height,weight,age,ratio;
+function calcTotal(){
+    if(!sex || !height || !age || !ratio || !weight){
+        result.textContent = "0";
+        return;
+    }
+    if(sex ==="female"){
+        result.textContent = Math.round((447.6+(9.2*weight)+(3.1 * height)-(4.3*age))*ratio);
+    }else{
+        result.textContent = Math.round((88.6+(13.4*weight)+(4.8 * height)-(5.7*age))*ratio);
+    }
+}
+calcTotal();
+function getStaticInformation(parentSelector,activeClass){
+    const elements = document.querySelectorAll(`${parentSelector} div`);
+
+    elements.forEach(elem =>{
+        elem.addEventListener('click',(e)=>{
+            if(e.target.getAttribute('data-ratio')){
+                ratio = e.target.getAttribute('data-ratio');
+            }
+            else{
+                sex = e.target.getAttribute('id');
+            }
+
+            elements.forEach(elem=>{
+                elem.classList.remove(activeClass);
+            })
+            e.target.classList.add(activeClass);
+            calcTotal();
+        })
+    })
+}
+getStaticInformation('#gender','calculating__choose-item_active');
+getStaticInformation('.calculating__choose_big','calculating__choose-item_active');
+
+function getDynamicInformation(selector){
+    const input = document.querySelector(selector);
+    input.addEventListener('input',()=>{
+        switch(input.getAttribute('id')){
+            case 'height':
+                height = +input.value;
+                break;
+                case 'weight':
+                    weight = +input.value;
+                    break;
+                case 'age':
+                    age = +input.value;
+                    break;
+        }
+    })
+    calcTotal();
+}
+getDynamicInformation('#height');
+getDynamicInformation('#weight');
+getDynamicInformation('#age');
+})
+
